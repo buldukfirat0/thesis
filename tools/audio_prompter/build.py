@@ -32,9 +32,9 @@ DOCS = os.path.join(ROOT, "docs", "index.html")
 LOCAL = os.path.join(ROOT, "EXAMPLE", "prompter.html")
 os.makedirs(CACHE, exist_ok=True)
 
-TITLE = "DFB ve DML sesli calisma"
-H1 = "DFB laser ve direct modulation &middot; sesli calisma"
-ALBUM = "DFB / DML sesli calisma"
+TITLE = "Part 1 - DFB ve DML sesli calisma"
+H1 = "Part 1 &middot; DFB laser ve direct modulation"
+ALBUM = "Part 1 - DFB ve DML"
 
 
 def spoken_of(disp, spoken):
@@ -94,11 +94,9 @@ shell = open(SHELL, encoding="utf-8").read()
 shell = shell.replace("<title>Seminer calismasi</title>", f"<title>{TITLE}</title>")
 shell = shell.replace("<h1>Seminer &mdash; sesli calisma</h1>", f"<h1>{H1}</h1>")
 shell = shell.replace("b.textContent = 'Slide ' + s.num + ' · ' + s.name;",
-                      "b.textContent = 'Part ' + s.num + ' · ' + s.name;")
-shell = shell.replace("$('#stag').textContent = 'Slide ' + s.num + '  ·  ' + s.sec;",
-                      "$('#stag').textContent = 'Part ' + s.num + '  ·  ' + s.sec;")
+                      "b.textContent = s.num + ' · ' + s.name;")
 shell = shell.replace("artist: 'Slide ' + s.num + ' · ' + s.sec,",
-                      "artist: 'Part ' + s.num + ' · ' + s.sec,")
+                      "artist: s.name + ' · ' + s.sec,")
 shell = shell.replace("album: 'Seminer sesli calisma'", f"album: '{ALBUM}'")
 assert "Slide ' + s.num" not in shell and "Seminer" not in shell
 

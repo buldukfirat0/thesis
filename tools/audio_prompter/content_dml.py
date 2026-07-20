@@ -8,7 +8,7 @@ PARTS = [
   "num": "1",
   "name": "What a DFB laser is",
   "sections": [
-    ("1/4 - THE DEVICE", [
+    ("THE DEVICE", [
       ("Distributed feedback lasers, abbreviated as DFB lasers, are semiconductor light sources that emit optical power at a single wavelength and maintain a stable continuous wave output.", None),
       ("The device is built as a p-i-n structure.", "The device is built as a P I N structure."),
       ("The lower layers are doped n type and therefore carry free electrons.", None),
@@ -51,7 +51,7 @@ PARTS = [
   "num": "2",
   "name": "Direct modulation",
   "sections": [
-    ("2/4 - THRESHOLD AND BIAS", [
+    ("THRESHOLD AND BIAS", [
       ("The device does not emit laser light until the injected current exceeds a particular value known as the threshold current.", None),
       ("Above that value the optical output power increases steadily and predictably with every further increase in current.", None),
       ("The laser is supplied with a constant bias current that lies above the threshold, so that it remains in the lasing regime at all times and never has to be started from rest.", None),
@@ -72,7 +72,7 @@ PARTS = [
   "num": "3",
   "name": "The problems",
   "sections": [
-    ("3/4 - THE COMMON ORIGIN", [
+    ("THE COMMON ORIGIN", [
       ("This method of encoding data is simple and requires no additional components, but it brings three problems with it.", None),
       ("All three originate in the same fact, which is that the injected current controls considerably more than the optical output power alone.", None),
     ]),
@@ -99,7 +99,7 @@ PARTS = [
   "num": "4",
   "name": "Transition to the EML",
   "sections": [
-    ("4/4 - ONE DEVICE, TWO TASKS", [
+    ("ONE DEVICE, TWO TASKS", [
       ("Every one of these limitations arises because a single device is being asked to perform two different tasks at the same time, namely generating the optical carrier and imposing the data upon it.", None),
       ("The solution is to separate the two tasks.", None),
     ]),
