@@ -28,6 +28,16 @@ cp "$ROOT/tools/audio_prompter/build.py" \
    "$ROOT/tools/audio_prompter/shell.html" \
    "$ROOT/tools/audio_prompter/publish.sh" tools/audio_prompter/
 
+# Pages serves this repo from the root, so the root page just forwards to the prompter
+cat > index.html <<'HTML'
+<!doctype html>
+<meta charset="utf-8">
+<meta http-equiv="refresh" content="0; url=docs/index.html">
+<title>DFB ve DML sesli calisma</title>
+<p style="font-family:system-ui;background:#14181f;color:#e8ecf2;padding:24px">
+Yonlendiriliyor: <a style="color:#d9a03f" href="docs/index.html">docs/index.html</a>
+HTML
+
 git add -A
 if git diff --cached --quiet; then
   echo "nothing changed"
