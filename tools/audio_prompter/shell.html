@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Seminer calismasi</title>
+<style>
+  :root {
+    --bg: #eceae4; --panel: #f7f5f0; --ink: #23272e; --muted: #6b7280;
+    --line: #d5d0c4; --acc: #b7791f; --term: #0f766e; --active: #fdf3e0;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #14181f; --panel: #1c222b; --ink: #e8ecf2; --muted: #98a2b0;
+            --line: #333c48; --acc: #d9a03f; --term: #3fb8a9; --active: #2b2415; }
+  }
+  * { box-sizing: border-box; margin: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { overscroll-behavior-y: none; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: system-ui, -apple-system, Roboto, "Segoe UI", sans-serif;
+    padding-bottom: calc(96px + var(--safe-b));
+    -webkit-text-size-adjust: 100%;
+  }
+  header {
+    position: sticky; top: 0; z-index: 5; background: var(--bg);
+    padding: 10px 12px 8px; border-bottom: 1px solid var(--line);
+    padding-top: calc(8px + env(safe-area-inset-top, 0px));
+  }
+  h1 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 3px; -webkit-overflow-scrolling: touch; }
+  .tabs button {
+    flex: 0 0 auto; border: 1px solid var(--line); background: var(--panel);
+    color: var(--ink); border-radius: 999px; padding: 9px 15px; font-size: 14px;
+  }
+  .tabs button.on { border-color: var(--acc); color: var(--acc); font-weight: 700; }
+  .opts { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; align-items: center; }
+  .opts button, .opts select {
+    border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+    border-radius: 9px; padding: 9px 11px; font-size: 13px; min-height: 40px;
+  }
+  .opts button.on { border-color: var(--acc); color: var(--acc); font-weight: 600; }
+  .opts .lbl { font-size: 11px; color: var(--muted); margin-right: -2px; }
+  .opts button.sleep.on { border-color: var(--term); color: var(--term); }
+  main { padding: 10px 12px; }
+  .sec { margin: 16px 0 6px; font-size: 11.5px; letter-spacing: 0.08em;
+         color: var(--muted); text-transform: uppercase; }
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 13px 14px; margin-bottom: 8px; font-size: 17px; line-height: 1.5;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .card .txt { flex: 1; }
+  .card .no { color: var(--muted); font-size: 12px; padding-top: 4px; min-width: 22px; }
+  .card.playing { background: var(--active); border-color: var(--acc); }
+  .bw { filter: blur(6px); border-radius: 3px; background: rgba(120,120,120,.10);
+        transition: filter .12s; cursor: pointer; }
+  .bw.show { filter: none; background: rgba(183,121,31,.14); }
+  .card.revealed .bw { filter: none; background: transparent; }
+  .eye { border: none; background: none; color: var(--muted); font-size: 18px;
+         padding: 3px 5px; display: none; }
+  .hiddenmode .eye { display: block; }
+  .pen { border: none; background: none; color: var(--muted); font-size: 15px;
+         padding: 3px 5px; }
+  .card.edited { border-left: 3px solid var(--term); }
+  .card .txt.editing { display: none; }
+  .editbox { flex: 1; display: none; flex-direction: column; gap: 8px; }
+  .card.editing-on .editbox { display: flex; }
+  .editbox textarea { width: 100%; min-height: 80px; font-size: 16px; padding: 8px;
+    border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); }
+  .editrow { display: flex; gap: 6px; }
+  .editrow button { border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+    border-radius: 8px; padding: 8px 12px; font-size: 13px; }
+  .editrow button.save { border-color: var(--acc); color: var(--acc); font-weight: 600; }
+  .tinynote { font-size: 11px; color: var(--muted); }
+  .bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 6;
+    background: var(--panel); border-top: 1px solid var(--line);
+    display: flex; gap: 8px; align-items: center; justify-content: center;
+    padding: 10px 12px calc(10px + var(--safe-b));
+  }
+  .bar button {
+    border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+    border-radius: 12px; font-size: 16px; height: 54px;
+  }
+  .bar .side { flex: 0 0 76px; }
+  .bar .play { flex: 1; font-weight: 700; font-size: 17px; border-color: var(--acc); color: var(--acc); }
+  .sleepwrap {
+    position: fixed; inset: 0; z-index: 40; display: none;
+    background: #05070a; color: #cbd3de;
+    flex-direction: column; align-items: center; justify-content: center;
+    padding: 32px 26px calc(40px + var(--safe-b)); text-align: center;
+  }
+  .sleepwrap.on { display: flex; }
+  .sleepwrap .stag { font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+    color: #55606f; margin-bottom: 22px; }
+  .sleepwrap .stxt { font-size: 22px; line-height: 1.55; max-width: 640px; color: #aeb7c4; }
+  .sleepwrap .sprog { position: absolute; top: calc(16px + env(safe-area-inset-top,0px));
+    left: 0; right: 0; font-size: 12px; color: #3d4650; }
+  .sleepwrap .srow { position: absolute; bottom: calc(30px + var(--safe-b)); left: 0; right: 0;
+    display: flex; gap: 12px; align-items: center; justify-content: center; }
+  .sleepwrap .srow button {
+    border: 1px solid #2a323d; background: #10151c; color: #8b96a5;
+    border-radius: 999px; padding: 13px 22px; font-size: 15px; min-width: 60px;
+  }
+  .sleepwrap .srow .pp { min-width: 96px; color: #b7c1d0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Seminer &mdash; sesli calisma</h1>
+  <div class="tabs" id="tabs"></div>
+  <div class="opts">
+    <span class="lbl">Ses</span>
+    <select id="voice">
+      <option value="steffan" selected>Steffan</option>
+      <option value="guy">Guy</option>
+      <option value="christopher">Christopher (bariton)</option>
+      <option value="eric">Eric (bariton)</option>
+      <option value="ava">Ava (kadin)</option>
+    </select>
+    <span class="lbl">Hiz</span>
+    <select id="speed">
+      <option value="0.7">0.7x</option>
+      <option value="0.85">0.85x</option>
+      <option value="1" selected>1x</option>
+      <option value="1.15">1.15x</option>
+      <option value="1.3">1.3x</option>
+    </select>
+    <button id="hidebtn" type="button">Gizle</button>
+    <button id="sleepbtn" class="sleep" type="button">Uyku modu</button>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<div class="bar">
+  <button class="side" id="prevbtn" type="button">&#9198;</button>
+  <button class="play" id="playbtn" type="button">&#9654; Oynat</button>
+  <button class="side" id="nextbtn" type="button">&#9197;</button>
+</div>
+
+<div class="sleepwrap" id="sleepwrap">
+  <div class="sprog" id="sprog"></div>
+  <div class="stag" id="stag">Uyku modu</div>
+  <div class="stxt" id="stxt"></div>
+  <div class="srow">
+    <button id="sprev" type="button">&#9198;</button>
+    <button id="spp" class="pp" type="button">Duraklat</button>
+    <button id="snext" type="button">&#9197;</button>
+    <button id="sstop" type="button">Bitir</button>
+  </div>
+</div>
+
+<script>
+const DURS = {"steffan": [6.384, 3.408, 3.768, 3.264, 2.304, 5.28, 5.736, 4.464, 5.76, 2.952, 6.552, 6.552, 2.592, 5.448, 9.528, 6.408, 6.48, 4.32, 3.144, 4.2, 3.552, 5.04, 2.592, 5.424, 4.056, 4.8, 4.344, 7.104, 5.232, 5.328, 7.176, 2.592, 5.592, 4.152, 4.992, 5.736, 3.576, 3.12, 2.568, 4.584, 7.752, 5.952, 5.112, 4.512, 4.512, 8.184, 5.208, 4.368, 3.792, 3.312, 7.8, 5.352, 3.192, 7.128, 3.864, 7.176, 6.456, 3.624, 7.704, 5.52, 2.784, 10.368, 3.528, 4.104, 5.976, 8.976, 2.88, 6.6, 8.112, 2.112, 7.968, 11.064, 8.952, 7.32, 5.64, 5.76, 7.656, 6.288, 4.824, 7.728, 4.656, 6.528, 3.336, 2.808, 4.296, 4.512, 4.656, 5.76, 9.288, 2.712, 7.632, 7.392, 4.368, 5.544, 9.408, 4.32, 4.128, 8.112, 5.616, 6.384, 8.856, 5.448, 2.16, 10.152, 9.48, 7.488, 9.576, 3.48, 5.784, 6.168, 5.232, 12.336, 3.048, 5.496, 7.128], "guy": [6.192, 3.336, 3.72, 3.24, 2.256, 5.064, 5.472, 4.272, 5.208, 3.144, 6.168, 6.288, 2.616, 5.208, 8.784, 5.856, 5.904, 4.104, 3.144, 4.368, 3.48, 4.872, 2.616, 5.4, 4.056, 4.584, 4.224, 6.504, 5.16, 5.064, 6.912, 2.616, 5.472, 3.816, 4.92, 5.832, 3.648, 3.096, 2.712, 4.512, 7.056, 5.376, 4.944, 4.392, 4.368, 7.248, 4.92, 4.248, 3.984, 3.336, 6.912, 5.04, 3.24, 6.576, 3.768, 6.576, 5.76, 3.552, 6.936, 5.064, 2.784, 9.0, 3.48, 4.032, 5.952, 7.752, 2.904, 6.192, 7.608, 2.184, 7.368, 9.912, 8.112, 6.984, 5.592, 5.592, 7.104, 6.24, 4.656, 7.296, 4.44, 6.168, 3.552, 3.0, 3.744, 4.08, 4.488, 5.424, 7.872, 2.76, 6.888, 6.6, 4.392, 5.376, 8.544, 4.176, 4.032, 7.32, 5.184, 5.88, 7.896, 5.112, 2.232, 9.096, 8.592, 7.056, 8.712, 3.408, 5.448, 5.688, 5.04, 10.728, 3.0, 5.064, 6.744], "christopher": [6.216, 3.264, 3.864, 3.264, 2.304, 5.088, 5.664, 4.632, 5.544, 3.144, 6.312, 6.312, 2.712, 5.352, 9.288, 5.976, 6.432, 4.152, 3.312, 4.296, 3.552, 4.944, 2.712, 5.424, 3.984, 4.896, 4.368, 7.2, 5.304, 5.304, 7.128, 2.712, 5.592, 4.224, 5.136, 5.832, 3.624, 3.168, 2.616, 4.752, 7.416, 6.552, 4.992, 4.56, 4.44, 7.728, 5.088, 4.536, 3.648, 3.456, 8.016, 5.328, 3.264, 7.056, 3.864, 6.624, 6.168, 3.792, 7.536, 5.304, 2.928, 10.128, 3.504, 4.128, 5.688, 8.496, 3.096, 6.528, 8.088, 2.256, 7.608, 10.44, 8.496, 7.08, 5.688, 5.688, 8.328, 6.288, 4.656, 7.728, 4.68, 6.48, 3.36, 3.168, 4.104, 4.44, 4.752, 5.736, 9.096, 3.0, 7.056, 7.176, 4.488, 5.544, 8.952, 4.44, 4.32, 8.232, 5.64, 6.408, 8.472, 5.544, 2.352, 9.84, 9.264, 7.368, 9.192, 3.552, 5.592, 6.024, 5.256, 12.192, 3.048, 5.496, 6.984], "eric": [6.312, 3.36, 3.936, 3.36, 2.304, 5.184, 5.688, 4.704, 5.592, 3.144, 6.48, 6.456, 2.76, 5.472, 9.504, 6.072, 6.48, 4.248, 3.36, 4.344, 3.552, 5.016, 2.76, 5.496, 4.056, 4.968, 4.416, 7.272, 5.376, 5.328, 7.272, 2.76, 5.712, 4.272, 5.256, 5.904, 3.672, 3.192, 2.712, 4.872, 7.56, 6.648, 5.064, 4.656, 4.536, 7.824, 5.208, 4.632, 3.744, 3.504, 8.112, 5.352, 3.312, 7.2, 3.912, 6.792, 6.288, 3.816, 7.656, 5.376, 2.976, 10.392, 3.576, 4.2, 5.808, 8.64, 3.096, 6.576, 8.208, 2.232, 7.848, 10.656, 8.592, 7.152, 5.88, 5.76, 8.4, 6.408, 4.704, 7.752, 4.752, 6.648, 3.36, 3.24, 4.2, 4.512, 4.848, 5.856, 9.264, 3.0, 7.248, 7.2, 4.536, 5.616, 9.144, 4.464, 4.416, 8.28, 5.76, 6.456, 8.616, 5.592, 2.4, 9.96, 9.336, 7.488, 9.312, 3.648, 5.616, 6.144, 5.352, 12.312, 3.12, 5.592, 7.08], "ava": [6.192, 2.976, 3.528, 2.76, 1.776, 4.752, 5.448, 4.368, 5.592, 2.64, 6.504, 6.672, 2.28, 5.184, 9.312, 5.952, 6.48, 4.272, 2.952, 4.08, 3.144, 4.776, 2.28, 5.04, 3.936, 4.344, 3.888, 7.224, 5.184, 5.208, 7.608, 2.28, 5.688, 4.08, 5.064, 5.328, 3.168, 2.76, 2.304, 4.248, 7.704, 5.784, 4.8, 4.128, 4.104, 7.992, 4.968, 4.056, 3.048, 3.264, 7.92, 5.016, 2.904, 6.984, 3.672, 6.912, 6.144, 3.024, 7.656, 5.064, 2.376, 10.032, 3.048, 3.72, 5.544, 8.352, 2.592, 6.336, 8.136, 1.776, 7.392, 11.256, 8.712, 7.704, 5.688, 5.376, 8.112, 6.264, 4.2, 8.136, 4.104, 6.216, 3.048, 2.712, 3.72, 4.008, 4.632, 5.424, 8.52, 2.352, 7.032, 7.224, 4.128, 5.52, 8.664, 4.008, 4.008, 8.136, 5.064, 6.384, 8.616, 5.136, 1.848, 10.176, 10.104, 7.416, 9.24, 3.096, 5.688, 6.0, 4.872, 12.024, 2.856, 5.112, 6.888]};
+(() => {
+  const $ = s => document.querySelector(s);
+  const tabsEl = $('#tabs'), mainEl = $('#main');
+  let slide = 0, idx = -1, playing = false, paused = false, hidden = false;
+  let voiceKey = 'steffan';
+  let flat = [];
+
+  // single audio element, in DOM + playsinline: needed for iOS lock-screen playback
+  const audio = new Audio();
+  audio.preload = 'auto';
+  audio.setAttribute('playsinline', '');
+  audio.hidden = true;
+  document.body.appendChild(audio);
+
+  function speed() { return parseFloat($('#speed').value); }
+
+  // decode base64 -> bytes (used by both single-clip and sleep concatenation)
+  function b64bytes(b64) {
+    const bin = atob(b64); const n = bin.length; const u = new Uint8Array(n);
+    for (let i = 0; i < n; i++) u[i] = bin.charCodeAt(i);
+    return u;
+  }
+  // single-clip playback uses a blob URL (data: URIs are unreliable for <audio> on iOS)
+  let lastClipURL = null;
+  function setClip(b64) {
+    const u = URL.createObjectURL(new Blob([b64bytes(b64)], { type: 'audio/mpeg' }));
+    audio.src = u;
+    if (lastClipURL) URL.revokeObjectURL(lastClipURL);
+    lastClipURL = u;
+  }
+  function setPlayLabel() {
+    $('#playbtn').innerHTML = (playing && !paused) ? '&#10074;&#10074; Duraklat'
+                             : paused ? '&#9654; Devam' : '&#9654; Oynat';
+  }
+
+  // ---- wake lock ----
+  let wakeLock = null;
+  async function acquireWake() {
+    try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {}
+  }
+  function releaseWake() { try { wakeLock && wakeLock.release(); } catch (e) {} wakeLock = null; }
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && (playing || sleepOn)) acquireWake();
+  });
+
+  // ---- persistent edits ----
+  let edits = {};
+  try { edits = JSON.parse(localStorage.getItem('sp_edits') || '{}'); } catch (e) { edits = {}; }
+  const keyOf = (si, ii) => si + ':' + ii;
+  function saveEdit(si, ii, text) { edits[keyOf(si, ii)] = text; localStorage.setItem('sp_edits', JSON.stringify(edits)); }
+  function clearEdit(si, ii) { delete edits[keyOf(si, ii)]; localStorage.setItem('sp_edits', JSON.stringify(edits)); }
+
+  try { const v = localStorage.getItem('sp_voice'); if (v) voiceKey = v; } catch (e) {}
+
+  // ---- browser speech for edited sentences ----
+  let enVoice = null;
+  function pickVoice() {
+    const vs = speechSynthesis.getVoices();
+    enVoice = vs.find(v => /en[-_]US/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null;
+  }
+  if ('speechSynthesis' in window) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+  function speakText(text, onEnd) {
+    if (!('speechSynthesis' in window)) { onEnd(); return; }
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-US'; u.rate = speed(); if (enVoice) u.voice = enVoice;
+    u.onend = () => { if (playing) onEnd(); };
+    speechSynthesis.speak(u);
+  }
+
+  const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+  function blurMarkup(text) {
+    return text.split(/(\s+)/).map(tok => {
+      if (/^\s+$/.test(tok) || tok === '') return tok;
+      const bare = tok.replace(/[^A-Za-z0-9]/g, '');
+      const blur = bare.length > 2 && Math.random() < 0.6;
+      return blur ? '<span class="bw">' + esc(tok) + '</span>' : esc(tok);
+    }).join('');
+  }
+
+  function render() {
+    mainEl.innerHTML = '';
+    flat = [];
+    DATA[slide].sections.forEach(sec => {
+      const h = document.createElement('div');
+      h.className = 'sec'; h.textContent = sec.title;
+      mainEl.appendChild(h);
+      sec.items.forEach((item) => {
+        const gi = flat.length;
+        const ek = edits[keyOf(slide, gi)];
+        const isEdited = ek != null && ek !== item.t;
+        const shown = isEdited ? ek : item.t;
+
+        const card = document.createElement('div');
+        card.className = 'card' + (isEdited ? ' edited' : '');
+        const no = document.createElement('span');
+        no.className = 'no'; no.textContent = String(gi + 1);
+        const txt = document.createElement('div');
+        txt.className = 'txt';
+        if (hidden) {
+          txt.innerHTML = blurMarkup(shown);
+          txt.addEventListener('click', ev => {
+            const t = ev.target;
+            if (t.classList && t.classList.contains('bw')) { ev.stopPropagation(); t.classList.toggle('show'); }
+          });
+        } else { txt.textContent = shown; }
+        const eye = document.createElement('button');
+        eye.className = 'eye'; eye.textContent = '\u{1F441}';
+        eye.setAttribute('aria-label', 'metni goster');
+        eye.addEventListener('click', ev => { ev.stopPropagation(); card.classList.toggle('revealed'); });
+        const pen = document.createElement('button');
+        pen.className = 'pen'; pen.textContent = '✎';
+        pen.setAttribute('aria-label', 'duzenle');
+
+        const box = document.createElement('div');
+        box.className = 'editbox';
+        const ta = document.createElement('textarea'); ta.value = shown;
+        const row = document.createElement('div'); row.className = 'editrow';
+        const bSave = document.createElement('button'); bSave.className = 'save'; bSave.textContent = 'Kaydet';
+        const bCancel = document.createElement('button'); bCancel.textContent = 'Vazgec';
+        const bReset = document.createElement('button'); bReset.textContent = 'Orijinal';
+        const note = document.createElement('span'); note.className = 'tinynote';
+        note.textContent = 'Duzenlenen cumle telefonun sesiyle okunur.';
+        row.append(bSave, bCancel, bReset);
+        box.append(ta, row, note);
+
+        pen.addEventListener('click', ev => { ev.stopPropagation(); card.classList.add('editing-on'); txt.classList.add('editing'); ta.focus(); });
+        bCancel.addEventListener('click', ev => { ev.stopPropagation(); card.classList.remove('editing-on'); txt.classList.remove('editing'); ta.value = flat[gi].t; });
+        bSave.addEventListener('click', ev => { ev.stopPropagation(); const v = ta.value.trim(); if (v && v !== item.t) saveEdit(slide, gi, v); else clearEdit(slide, gi); render(); });
+        bReset.addEventListener('click', ev => { ev.stopPropagation(); clearEdit(slide, gi); render(); });
+
+        card.append(no, txt, box, pen, eye);
+        card.addEventListener('click', () => { playAt(gi); });
+        mainEl.appendChild(card);
+        flat.push({ orig: item.t, t: shown, a: item.a, edited: isEdited, el: card });
+      });
+    });
+    document.body.classList.toggle('hiddenmode', hidden);
+    idx = -1; stop();
+  }
+
+  function mark() { flat.forEach((f, i) => f.el.classList.toggle('playing', i === idx)); }
+
+  function advance() {
+    if (!playing || paused) return;
+    if (idx + 1 < flat.length) { setTimeout(() => { if (playing && !paused) playAt(idx + 1); }, 300); }
+    else if (slide + 1 < DATA.length) {           // auto-advance into the next slide
+      slide += 1; syncTabs(); render();
+      setTimeout(() => playAt(0), 300);
+    } else stop();
+  }
+
+  function playAt(i) {
+    if (i < 0 || i >= flat.length) { stop(); return; }
+    if (sleepOn) stopSleep();
+    audio.pause();
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+    idx = i; mark(); playing = true; paused = false; acquireWake();
+    setPlayLabel();
+    const f = flat[i];
+    if (f.edited) { speakText(f.t, advance); }
+    else { setClip(f.a[voiceKey] || f.a.steffan); audio.playbackRate = speed(); audio.play().catch(() => {}); }
+    f.el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+
+  function stop() {
+    playing = false; paused = false; audio.pause();
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+    setPlayLabel(); mark();
+    if (!sleepOn) releaseWake();
+  }
+
+  // ---------------- SLEEP MODE ----------------
+  // Butun metin tek surekli mp3 akisinda birlestirilir -> ekran kilitliyken de calar (YouTube gibi).
+  let sleepOn = false, seq = [], offsets = [], sleepURL = null, sleepIdx = -1;
+
+  function buildSeq() {
+    seq = [];
+    DATA.forEach((d) => d.sections.forEach((sec) =>
+      sec.items.forEach((it) => seq.push({ num: d.num, sec: sec.title, t: it.t }))));
+  }
+  function buildConcat(vk) {
+    const parts = [];
+    DATA.forEach((d) => d.sections.forEach((sec) => sec.items.forEach((it) => {
+      parts.push(b64bytes(it.a[vk] || it.a.steffan));
+    })));
+    const blob = new Blob(parts, { type: 'audio/mpeg' });
+    const ds = DURS[vk] || DURS.steffan;
+    offsets = []; let acc = 0;
+    for (let i = 0; i < ds.length; i++) { offsets.push(acc); acc += ds[i]; }
+    if (sleepURL) URL.revokeObjectURL(sleepURL);
+    sleepURL = URL.createObjectURL(blob);
+    return sleepURL;
+  }
+  function idxAtTime(t) {
+    let lo = 0, hi = offsets.length - 1, ans = 0;
+    while (lo <= hi) { const m = (lo + hi) >> 1; if (offsets[m] <= t) { ans = m; lo = m + 1; } else hi = m - 1; }
+    return ans;
+  }
+  function sleepShow(i) {
+    const s = seq[i]; if (!s) return;
+    $('#stxt').textContent = s.t;
+    $('#stag').textContent = 'Slide ' + s.num + '  ·  ' + s.sec;
+    $('#sprog').textContent = (i + 1) + ' / ' + seq.length;
+    setMediaMeta(s);
+  }
+  function startSleep() {
+    buildSeq();
+    const url = buildConcat(voiceKey);   // sync -> kullanici dokunusunu korur
+    sleepOn = true; playing = false; sleepIdx = 0;
+    $('#sleepbtn').classList.add('on');
+    $('#sleepwrap').classList.add('on');
+    $('#spp').textContent = 'Duraklat';
+    acquireWake();
+    audio.pause();
+    audio.src = url; audio.playbackRate = speed();
+    try { audio.currentTime = 0; } catch (e) {}
+    sleepShow(0);
+    audio.play().catch(() => {});
+  }
+  function stopSleep() {
+    sleepOn = false; audio.pause();
+    $('#sleepbtn').classList.remove('on');
+    $('#sleepwrap').classList.remove('on');
+    releaseWake();
+  }
+  function sleepSeekTo(i) {
+    i = Math.max(0, Math.min(offsets.length - 1, i));
+    try { audio.currentTime = offsets[i] + 0.02; } catch (e) {}
+    sleepIdx = i; sleepShow(i);
+    if (audio.paused) audio.play().catch(() => {});
+  }
+
+  audio.addEventListener('timeupdate', () => {
+    if (!sleepOn) return;
+    const i = idxAtTime(audio.currentTime);
+    if (i !== sleepIdx) { sleepIdx = i; sleepShow(i); }
+  });
+  audio.addEventListener('ended', () => { if (sleepOn) stopSleep(); else advance(); });
+  audio.addEventListener('play', () => { if (sleepOn) $('#spp').textContent = 'Duraklat'; });
+  audio.addEventListener('pause', () => { if (sleepOn && !audio.ended) $('#spp').textContent = 'Devam'; });
+
+  // ---- MediaSession: kilit ekrani kontrolleri ----
+  function setMediaMeta(s) {
+    if (!('mediaSession' in navigator)) return;
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: s.t.length > 64 ? s.t.slice(0, 64) + '…' : s.t,
+        artist: 'Slide ' + s.num + ' · ' + s.sec,
+        album: 'Seminer sesli calisma'
+      });
+    } catch (e) {}
+  }
+  function setupMediaSession() {
+    if (!('mediaSession' in navigator)) return;
+    const ms = navigator.mediaSession;
+    try {
+      ms.setActionHandler('play', () => audio.play().catch(() => {}));
+      ms.setActionHandler('pause', () => audio.pause());
+      ms.setActionHandler('previoustrack', () => { if (sleepOn) sleepSeekTo(sleepIdx - 1); });
+      ms.setActionHandler('nexttrack', () => { if (sleepOn) sleepSeekTo(sleepIdx + 1); });
+    } catch (e) {}
+  }
+
+  // ---------------- controls ----------------
+  $('#playbtn').addEventListener('click', () => {
+    if (playing && !paused) {
+      audio.pause(); paused = true; setPlayLabel(); if (!sleepOn) releaseWake();
+    }
+    else if (playing && paused) {
+      paused = false; acquireWake();
+      audio.play().catch(() => {}); setPlayLabel();
+    }
+    else { playAt(idx < 0 ? 0 : idx); }
+  });
+  $('#prevbtn').addEventListener('click', () => playAt(Math.max(0, idx - 1)));
+  $('#nextbtn').addEventListener('click', () => playAt(Math.min(flat.length - 1, idx + 1)));
+  $('#speed').addEventListener('change', () => { audio.playbackRate = speed(); });
+  $('#voice').addEventListener('change', e => {
+    voiceKey = e.target.value;
+    try { localStorage.setItem('sp_voice', voiceKey); } catch (er) {}
+    if (sleepOn) {
+      const cur = sleepIdx, wasPlaying = !audio.paused;
+      const url = buildConcat(voiceKey);
+      audio.src = url; audio.playbackRate = speed();
+      audio.addEventListener('loadedmetadata', function once() {
+        audio.removeEventListener('loadedmetadata', once);
+        try { audio.currentTime = offsets[cur] + 0.02; } catch (e) {}
+        if (wasPlaying) audio.play().catch(() => {});
+      });
+    } else if (playing && idx >= 0 && !flat[idx].edited) { playAt(idx); }
+  });
+  $('#hidebtn').addEventListener('click', () => { hidden = !hidden; $('#hidebtn').classList.toggle('on', hidden); render(); });
+  $('#sleepbtn').addEventListener('click', () => { if (sleepOn) stopSleep(); else { stop(); startSleep(); } });
+  $('#sstop').addEventListener('click', stopSleep);
+  $('#sprev').addEventListener('click', () => sleepSeekTo(sleepIdx - 1));
+  $('#snext').addEventListener('click', () => sleepSeekTo(sleepIdx + 1));
+  $('#spp').addEventListener('click', () => { if (audio.paused) audio.play().catch(() => {}); else audio.pause(); });
+
+  function syncTabs() { [...tabsEl.children].forEach((c, k) => c.classList.toggle('on', k === slide)); }
+
+  DATA.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = 'Slide ' + s.num + ' · ' + s.name;
+    b.addEventListener('click', () => { slide = i; syncTabs(); render(); });
+    if (i === 0) b.classList.add('on');
+    tabsEl.appendChild(b);
+  });
+
+  $('#voice').value = voiceKey;
+  setupMediaSession();
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "DFB ve DML sesli calisma",
+  "short_name": "DFB/DML",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#14181f",
+  "theme_color": "#14181f",
+  "icons": []
+}
