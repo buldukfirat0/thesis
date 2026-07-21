@@ -42,7 +42,7 @@ PARTS = [
                         None,
                     ),
                     (
-                        "Specifically, we inject electrons from the n side and holes from the p side; this forward bias reduces the electric field barrier at the junction, which lets the carriers diffuse into the intrinsic region.",
+                        "Specifically, this forward bias reduces the electric field barrier at the junction, which lets electrons diffuse in from the n side and holes diffuse in from the p side, injecting them into the intrinsic region.",
                         None,
                     ),
                     (
