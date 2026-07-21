@@ -32,9 +32,9 @@ DOCS = os.path.join(ROOT, "docs", "index.html")
 LOCAL = os.path.join(ROOT, "EXAMPLE", "prompter.html")
 os.makedirs(CACHE, exist_ok=True)
 
-TITLE = "Part 1 - DFB ve DML sesli calisma"
-H1 = "Part 1 &middot; DFB laser ve direct modulation"
-ALBUM = "Part 1 - DFB ve DML"
+TITLE = "DFB, DML ve EAM sesli calisma"
+H1 = "DFB laser &middot; DML &middot; EAM"
+ALBUM = "DFB - EAM sesli calisma"
 
 
 def spoken_of(disp, spoken):
