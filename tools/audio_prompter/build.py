@@ -93,8 +93,6 @@ assert all(len(v) == n for v in durs.values())
 shell = open(SHELL, encoding="utf-8").read()
 shell = shell.replace("<title>Seminer calismasi</title>", f"<title>{TITLE}</title>")
 shell = shell.replace("<h1>Seminer &mdash; sesli calisma</h1>", f"<h1>{H1}</h1>")
-shell = shell.replace("b.textContent = 'Slide ' + s.num + ' · ' + s.name;",
-                      "b.textContent = s.num + ' · ' + s.name;")
 shell = shell.replace("artist: 'Slide ' + s.num + ' · ' + s.sec,",
                       "artist: s.name + ' · ' + s.sec,")
 shell = shell.replace("album: 'Seminer sesli calisma'", f"album: '{ALBUM}'")

@@ -30,12 +30,57 @@
     padding-top: calc(8px + env(safe-area-inset-top, 0px));
   }
   h1 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-  .tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 3px; -webkit-overflow-scrolling: touch; }
-  .tabs button {
-    flex: 0 0 auto; border: 1px solid var(--line); background: var(--panel);
-    color: var(--ink); border-radius: 999px; padding: 9px 15px; font-size: 14px;
+  /* bolum secici: tek satir, yatay kaydirma yok. Ok tuslari sirayla gezer,
+     ortadaki dugme butun bolumlerin listesini tam ekran acar. */
+  .pick { display: flex; gap: 8px; align-items: stretch; }
+  .pick .nav {
+    flex: 0 0 46px; border: 1px solid var(--line); background: var(--panel);
+    color: var(--ink); border-radius: 10px; font-size: 18px;
   }
-  .tabs button.on { border-color: var(--acc); color: var(--acc); font-weight: 700; }
+  .pick .nav:disabled { opacity: .3; }
+  .pick .cur {
+    flex: 1; min-width: 0; display: flex; align-items: center; gap: 9px; text-align: left;
+    border: 1px solid var(--acc); background: var(--panel); color: var(--ink);
+    border-radius: 10px; padding: 8px 11px; min-height: 48px; font-size: 15px;
+  }
+  .pick .cur .badge {
+    flex: 0 0 auto; background: var(--acc); color: var(--bg); font-weight: 700;
+    border-radius: 7px; padding: 3px 8px; font-size: 12.5px; font-variant-numeric: tabular-nums;
+  }
+  .pick .cur .nm { flex: 1; min-width: 0; font-weight: 600;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pick .cur .pos { flex: 0 0 auto; color: var(--muted); font-size: 11.5px;
+    font-variant-numeric: tabular-nums; }
+  /* tam ekran bolum listesi */
+  .sheet { position: fixed; inset: 0; z-index: 30; display: none;
+    flex-direction: column; background: var(--bg); }
+  .sheet.on { display: flex; }
+  .sheet .shead { display: flex; gap: 8px; align-items: center;
+    padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px;
+    border-bottom: 1px solid var(--line); }
+  .sheet .shead input {
+    flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--panel);
+    color: var(--ink); border-radius: 10px; padding: 11px 12px; font-size: 16px;
+    -webkit-appearance: none; appearance: none;
+  }
+  .sheet .shead button { flex: 0 0 auto; border: 1px solid var(--line); background: var(--panel);
+    color: var(--ink); border-radius: 10px; padding: 11px 14px; font-size: 14px; }
+  .sheet .slist { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain; scrollbar-width: none;
+    padding: 8px 12px calc(18px + var(--safe-b)); }
+  .sheet .slist::-webkit-scrollbar { display: none; }
+  .sheet .row {
+    display: flex; align-items: center; gap: 11px; width: 100%; text-align: left;
+    border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+    border-radius: 10px; padding: 12px 12px; margin-bottom: 6px; font-size: 15px;
+  }
+  .sheet .row .b { flex: 0 0 30px; text-align: center; color: var(--muted);
+    font-size: 13px; font-variant-numeric: tabular-nums; }
+  .sheet .row .n { flex: 1; min-width: 0; }
+  .sheet .row .c { flex: 0 0 auto; color: var(--muted); font-size: 11.5px; }
+  .sheet .row.on { border-color: var(--acc); background: var(--active); }
+  .sheet .row.on .b, .sheet .row.on .n { color: var(--acc); font-weight: 700; }
+  .sheet .none { color: var(--muted); font-size: 14px; padding: 14px 4px; }
   .opts { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; align-items: center; }
   .opts button, .opts select {
     border: 1px solid var(--line); background: var(--panel); color: var(--ink);
@@ -111,7 +156,15 @@
 <body>
 <header>
   <h1>Seminer &mdash; sesli calisma</h1>
-  <div class="tabs" id="tabs"></div>
+  <div class="pick">
+    <button class="nav" id="partprev" type="button" aria-label="onceki bolum">&#8249;</button>
+    <button class="cur" id="partbtn" type="button">
+      <span class="badge" id="partnum"></span>
+      <span class="nm" id="partname"></span>
+      <span class="pos" id="partpos"></span>
+    </button>
+    <button class="nav" id="partnext" type="button" aria-label="sonraki bolum">&#8250;</button>
+  </div>
   <div class="opts">
     <span class="lbl">Ses</span>
     <select id="voice">
@@ -148,6 +201,15 @@
   <button class="side" id="nextbtn" type="button">&#9197;</button>
 </div>
 
+<div class="sheet" id="sheet">
+  <div class="shead">
+    <input id="pfilter" type="search" placeholder="Bolum ara" autocomplete="off"
+           autocorrect="off" autocapitalize="none" spellcheck="false">
+    <button id="sheetclose" type="button">Kapat</button>
+  </div>
+  <div class="slist" id="slist"></div>
+</div>
+
 <div class="sleepwrap" id="sleepwrap">
   <div class="sprog" id="sprog"></div>
   <div class="stag" id="stag">Uyku modu</div>
@@ -164,7 +226,7 @@
 const DURS = {"steffan": [6.384, 3.408, 3.768, 3.264, 2.304, 5.28, 5.736, 4.464, 5.76, 2.952, 6.552, 6.552, 2.592, 5.448, 9.528, 6.408, 6.48, 4.32, 3.144, 4.2, 3.552, 5.04, 2.592, 5.424, 4.056, 4.8, 4.344, 7.104, 5.232, 5.328, 7.176, 2.592, 5.592, 4.152, 4.992, 5.736, 3.576, 3.12, 2.568, 4.584, 7.752, 5.952, 5.112, 4.512, 4.512, 8.184, 5.208, 4.368, 3.792, 3.312, 7.8, 5.352, 3.192, 7.128, 3.864, 7.176, 6.456, 3.624, 7.704, 5.52, 2.784, 10.368, 3.528, 4.104, 5.976, 8.976, 2.88, 6.6, 8.112, 2.112, 7.968, 11.064, 8.952, 7.32, 5.64, 5.76, 7.656, 6.288, 4.824, 7.728, 4.656, 6.528, 3.336, 2.808, 4.296, 4.512, 4.656, 5.76, 9.288, 2.712, 7.632, 7.392, 4.368, 5.544, 9.408, 4.32, 4.128, 8.112, 5.616, 6.384, 8.856, 5.448, 2.16, 10.152, 9.48, 7.488, 9.576, 3.48, 5.784, 6.168, 5.232, 12.336, 3.048, 5.496, 7.128], "guy": [6.192, 3.336, 3.72, 3.24, 2.256, 5.064, 5.472, 4.272, 5.208, 3.144, 6.168, 6.288, 2.616, 5.208, 8.784, 5.856, 5.904, 4.104, 3.144, 4.368, 3.48, 4.872, 2.616, 5.4, 4.056, 4.584, 4.224, 6.504, 5.16, 5.064, 6.912, 2.616, 5.472, 3.816, 4.92, 5.832, 3.648, 3.096, 2.712, 4.512, 7.056, 5.376, 4.944, 4.392, 4.368, 7.248, 4.92, 4.248, 3.984, 3.336, 6.912, 5.04, 3.24, 6.576, 3.768, 6.576, 5.76, 3.552, 6.936, 5.064, 2.784, 9.0, 3.48, 4.032, 5.952, 7.752, 2.904, 6.192, 7.608, 2.184, 7.368, 9.912, 8.112, 6.984, 5.592, 5.592, 7.104, 6.24, 4.656, 7.296, 4.44, 6.168, 3.552, 3.0, 3.744, 4.08, 4.488, 5.424, 7.872, 2.76, 6.888, 6.6, 4.392, 5.376, 8.544, 4.176, 4.032, 7.32, 5.184, 5.88, 7.896, 5.112, 2.232, 9.096, 8.592, 7.056, 8.712, 3.408, 5.448, 5.688, 5.04, 10.728, 3.0, 5.064, 6.744], "christopher": [6.216, 3.264, 3.864, 3.264, 2.304, 5.088, 5.664, 4.632, 5.544, 3.144, 6.312, 6.312, 2.712, 5.352, 9.288, 5.976, 6.432, 4.152, 3.312, 4.296, 3.552, 4.944, 2.712, 5.424, 3.984, 4.896, 4.368, 7.2, 5.304, 5.304, 7.128, 2.712, 5.592, 4.224, 5.136, 5.832, 3.624, 3.168, 2.616, 4.752, 7.416, 6.552, 4.992, 4.56, 4.44, 7.728, 5.088, 4.536, 3.648, 3.456, 8.016, 5.328, 3.264, 7.056, 3.864, 6.624, 6.168, 3.792, 7.536, 5.304, 2.928, 10.128, 3.504, 4.128, 5.688, 8.496, 3.096, 6.528, 8.088, 2.256, 7.608, 10.44, 8.496, 7.08, 5.688, 5.688, 8.328, 6.288, 4.656, 7.728, 4.68, 6.48, 3.36, 3.168, 4.104, 4.44, 4.752, 5.736, 9.096, 3.0, 7.056, 7.176, 4.488, 5.544, 8.952, 4.44, 4.32, 8.232, 5.64, 6.408, 8.472, 5.544, 2.352, 9.84, 9.264, 7.368, 9.192, 3.552, 5.592, 6.024, 5.256, 12.192, 3.048, 5.496, 6.984], "eric": [6.312, 3.36, 3.936, 3.36, 2.304, 5.184, 5.688, 4.704, 5.592, 3.144, 6.48, 6.456, 2.76, 5.472, 9.504, 6.072, 6.48, 4.248, 3.36, 4.344, 3.552, 5.016, 2.76, 5.496, 4.056, 4.968, 4.416, 7.272, 5.376, 5.328, 7.272, 2.76, 5.712, 4.272, 5.256, 5.904, 3.672, 3.192, 2.712, 4.872, 7.56, 6.648, 5.064, 4.656, 4.536, 7.824, 5.208, 4.632, 3.744, 3.504, 8.112, 5.352, 3.312, 7.2, 3.912, 6.792, 6.288, 3.816, 7.656, 5.376, 2.976, 10.392, 3.576, 4.2, 5.808, 8.64, 3.096, 6.576, 8.208, 2.232, 7.848, 10.656, 8.592, 7.152, 5.88, 5.76, 8.4, 6.408, 4.704, 7.752, 4.752, 6.648, 3.36, 3.24, 4.2, 4.512, 4.848, 5.856, 9.264, 3.0, 7.248, 7.2, 4.536, 5.616, 9.144, 4.464, 4.416, 8.28, 5.76, 6.456, 8.616, 5.592, 2.4, 9.96, 9.336, 7.488, 9.312, 3.648, 5.616, 6.144, 5.352, 12.312, 3.12, 5.592, 7.08], "ava": [6.192, 2.976, 3.528, 2.76, 1.776, 4.752, 5.448, 4.368, 5.592, 2.64, 6.504, 6.672, 2.28, 5.184, 9.312, 5.952, 6.48, 4.272, 2.952, 4.08, 3.144, 4.776, 2.28, 5.04, 3.936, 4.344, 3.888, 7.224, 5.184, 5.208, 7.608, 2.28, 5.688, 4.08, 5.064, 5.328, 3.168, 2.76, 2.304, 4.248, 7.704, 5.784, 4.8, 4.128, 4.104, 7.992, 4.968, 4.056, 3.048, 3.264, 7.92, 5.016, 2.904, 6.984, 3.672, 6.912, 6.144, 3.024, 7.656, 5.064, 2.376, 10.032, 3.048, 3.72, 5.544, 8.352, 2.592, 6.336, 8.136, 1.776, 7.392, 11.256, 8.712, 7.704, 5.688, 5.376, 8.112, 6.264, 4.2, 8.136, 4.104, 6.216, 3.048, 2.712, 3.72, 4.008, 4.632, 5.424, 8.52, 2.352, 7.032, 7.224, 4.128, 5.52, 8.664, 4.008, 4.008, 8.136, 5.064, 6.384, 8.616, 5.136, 1.848, 10.176, 10.104, 7.416, 9.24, 3.096, 5.688, 6.0, 4.872, 12.024, 2.856, 5.112, 6.888]};
 (() => {
   const $ = s => document.querySelector(s);
-  const tabsEl = $('#tabs'), mainEl = $('#main');
+  const mainEl = $('#main'), slistEl = $('#slist'), sheetEl = $('#sheet'), pfilter = $('#pfilter');
   let slide = 0, idx = -1, playing = false, paused = false, hidden = false, playsLeft = 1;
   let voiceKey = 'steffan';
   let flat = [];
@@ -501,16 +563,73 @@ const DURS = {"steffan": [6.384, 3.408, 3.768, 3.264, 2.304, 5.28, 5.736, 4.464,
   $('#snext').addEventListener('click', () => sleepSeekTo(curSentence() + 1));
   $('#spp').addEventListener('click', () => { if (audio.paused) audio.play().catch(() => {}); else audio.pause(); });
 
-  function syncTabs() { [...tabsEl.children].forEach((c, k) => c.classList.toggle('on', k === slide)); }
+  // ---------------- bolum secici ----------------
+  const nSent = s => s.sections.reduce((a, sec) => a + sec.items.length, 0);
 
-  DATA.forEach((s, i) => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.textContent = 'Slide ' + s.num + ' · ' + s.name;
-    b.addEventListener('click', () => { slide = i; syncTabs(); render(); });
-    if (i === 0) b.classList.add('on');
-    tabsEl.appendChild(b);
+  function buildPicker() {
+    slistEl.innerHTML = '';
+    DATA.forEach((s, i) => {
+      const r = document.createElement('button');
+      r.type = 'button'; r.className = 'row';
+      const b = document.createElement('span'); b.className = 'b'; b.textContent = s.num;
+      const n = document.createElement('span'); n.className = 'n'; n.textContent = s.name;
+      const c = document.createElement('span'); c.className = 'c'; c.textContent = nSent(s) + ' cumle';
+      r.append(b, n, c);
+      r.addEventListener('click', () => { closeSheet(); goPart(i); });
+      slistEl.appendChild(r);
+    });
+    const none = document.createElement('div');
+    none.className = 'none'; none.id = 'pnone'; none.textContent = 'Eslesen bolum yok.';
+    none.style.display = 'none';
+    slistEl.appendChild(none);
+  }
+
+  // syncTabs: baslıktaki bolum dugmesini ve listedeki isaretlemeyi gunceller
+  function syncTabs() {
+    const s = DATA[slide];
+    $('#partnum').textContent = s.num;
+    $('#partname').textContent = s.name;
+    $('#partpos').textContent = (slide + 1) + '/' + DATA.length;
+    $('#partprev').disabled = slide === 0;
+    $('#partnext').disabled = slide === DATA.length - 1;
+    [...slistEl.querySelectorAll('.row')].forEach((r, k) => r.classList.toggle('on', k === slide));
+  }
+
+  function goPart(i) {
+    i = Math.max(0, Math.min(DATA.length - 1, i));
+    if (i === slide) return;
+    slide = i; syncTabs(); render(); window.scrollTo(0, 0);
+  }
+
+  function applyFilter() {
+    const q = pfilter.value.trim().toLowerCase();
+    let shown = 0;
+    [...slistEl.querySelectorAll('.row')].forEach(r => {
+      const hit = !q || r.textContent.toLowerCase().includes(q);
+      r.style.display = hit ? '' : 'none';
+      if (hit) shown += 1;
+    });
+    $('#pnone').style.display = shown ? 'none' : '';
+  }
+  function openSheet() {
+    pfilter.value = ''; applyFilter();
+    sheetEl.classList.add('on');
+    const on = slistEl.querySelectorAll('.row')[slide];
+    if (on) on.scrollIntoView({ block: 'center' });
+  }
+  function closeSheet() { sheetEl.classList.remove('on'); pfilter.blur(); }
+
+  $('#partbtn').addEventListener('click', openSheet);
+  $('#sheetclose').addEventListener('click', closeSheet);
+  $('#partprev').addEventListener('click', () => goPart(slide - 1));
+  $('#partnext').addEventListener('click', () => goPart(slide + 1));
+  pfilter.addEventListener('input', applyFilter);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && sheetEl.classList.contains('on')) closeSheet();
   });
+
+  buildPicker();
+  syncTabs();
 
   $('#voice').value = voiceKey;
   try { const r = localStorage.getItem('sp_rep'); if (r === '2' || r === '3') $('#rep').value = r; } catch (e) {}

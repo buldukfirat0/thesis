@@ -139,15 +139,19 @@ PARTS = [
                 "WRITING THE BITS",
                 [
                     (
-                        "When we send a 1, we push the current up a bit, and the optical output gets brighter.",
+                        "When we send a 1, we push the current up, and the optical output gets brighter.",
                         None,
                     ),
                     (
-                        "When we send a 0, we pull the current down a bit, but we stay above threshold, so the laser stays on and the output just gets dimmer.",
+                        "When we send a 0, we pull the current down, but we stay above threshold, so the laser stays on and the output just gets dimmer.",
                         None,
                     ),
                     (
-                        "This way, the binary data is written directly onto the intensity of the light, and this is why we call this method direct modulation.",
+                        "This way, the binary data is written directly onto the intensity of the light.",
+                        None,
+                    ),
+                    (
+                        "We call this direct modulation because we modulate the laser source itself, through its drive current, rather than using a separate device after it.",
                         None,
                     ),
                 ],
@@ -156,13 +160,13 @@ PARTS = [
     },
     {
         "num": "3",
-        "name": "The three problems",
+        "name": "The two problems",
         "sections": [
             (
-                "THE THREE REASONS",
+                "THE TWO REASONS",
                 [
                     (
-                        "There are three reasons for this: chirp, extinction ratio, and speed.",
+                        "There are two reasons for this: chirp and speed.",
                         None,
                     ),
                 ],
@@ -181,39 +185,14 @@ PARTS = [
                 ],
             ),
             (
-                "EXTINCTION RATIO",
-                [
-                    (
-                        "The second is extinction ratio.",
-                        None,
-                    ),
-                    (
-                        "Extinction ratio is the ratio of the optical power in our 1 level to the optical power in our 0 level, P1 divided by P0.",
-                        "Extinction ratio is the ratio of the optical power in our 1 level to the optical power in our 0 level, P one divided by P zero.",
-                    ),
-                    (
-                        "Optical power is the rate at which electromagnetic energy flows through a surface, measured in watts.",
-                        None,
-                    ),
-                    (
-                        "It stays small because restarting the laser from below threshold takes a finite time, set by the carrier lifetime, which is longer than a single bit period, so we can only lower the current, never remove it, and the 0 level still carries significant power.",
-                        None,
-                    ),
-                ],
-            ),
-            (
                 "SPEED",
                 [
                     (
-                        "The third is speed.",
+                        "The second is speed.",
                         None,
                     ),
                     (
                         "This is the upper limit on how fast we can switch bits, and it happens because the carrier density and the photon density inside the cavity are coupled to each other, so when we suddenly change the current, the optical power doesn't settle instantly, it oscillates for a while before settling.",
-                        None,
-                    ),
-                    (
-                        "This oscillation is called the relaxation oscillation, and its frequency sets an upper bound on the bit rate we can use.",
                         None,
                     ),
                 ],
@@ -228,7 +207,7 @@ PARTS = [
                 "ONE DEVICE, TWO JOBS",
                 [
                     (
-                        "So all three problems come from the same root cause: we're asking one single device to do two jobs at once, generate the light and carry the data.",
+                        "So both problems come from the same root cause: we're asking one single device to do two jobs at once, generate the light and carry the data.",
                         None,
                     ),
                     (
