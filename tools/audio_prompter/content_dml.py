@@ -733,6 +733,71 @@ PARTS = [
             ),
         ],
     },
+    {
+        "num": "8",
+        "name": "F-K-E",
+        "sections": [
+            (
+                "FUNDAMENTALS",
+                [
+                    (
+                        "Before going into how my device actually operates, I want to give an introduction to the fundamentals we need.",
+                        None,
+                    ),
+                    (
+                        "Electroabsorption means that when we apply a voltage to a semiconductor, the way it absorbs light changes.",
+                        None,
+                    ),
+                    (
+                        "To see where that comes from, start with bulk material.",
+                        None,
+                    ),
+                    (
+                        "Bulk means the carriers move freely in all three dimensions.",
+                        None,
+                    ),
+                    (
+                        "There is no confinement anywhere, and the energy bands are continuous.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "THE ABSORPTION RULE",
+                [
+                    (
+                        "In such a material there is one rule for absorption.",
+                        None,
+                    ),
+                    (
+                        "A photon can only be absorbed if it carries at least the band gap energy, because that is what it takes to lift an electron from the valence band to the conduction band.",
+                        None,
+                    ),
+                    (
+                        "If the photon carries less than that, the semiconductor is transparent and the light passes straight through.",
+                        None,
+                    ),
+                    (
+                        "If it carries more, the photon is absorbed.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "SLIDE 1: NO FIELD",
+                [
+                    (
+                        "On the left you see exactly this situation.",
+                        None,
+                    ),
+                    (
+                        "No voltage is applied, so both band edges are flat lines across the material.",
+                        None,
+                    ),
+                ],
+            ),
+        ],
+    },
 ]
 
 VOICES = {
