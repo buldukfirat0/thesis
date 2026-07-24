@@ -404,7 +404,7 @@ PARTS = [
     },
     {
         "num": "6",
-        "name": "EAM physics under reverse bias",
+        "name": "Quantum-Confined Stark Effect",
         "sections": [
             (
                 "THE FIELD",
@@ -792,6 +792,911 @@ PARTS = [
                     ),
                     (
                         "No voltage is applied, so both band edges are flat lines across the material.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "SLIDE 1: THE SPECTRUM",
+                [
+                    (
+                        "On the right is the absorption spectrum of the same material.",
+                        None,
+                    ),
+                    (
+                        "The horizontal axis is the photon energy, but measured from the band gap.",
+                        None,
+                    ),
+                    (
+                        "Zero is exactly at the gap.",
+                        None,
+                    ),
+                    (
+                        "To the left the photon is weaker than the gap, to the right it is stronger.",
+                        None,
+                    ),
+                    (
+                        "The vertical axis is the absorption.",
+                        None,
+                    ),
+                    (
+                        "Zero means the light passes, high means the light is absorbed.",
+                        None,
+                    ),
+                    (
+                        "The grey dashed curve is the case with no field.",
+                        None,
+                    ),
+                    (
+                        "Look at the whole left half.",
+                        None,
+                    ),
+                    (
+                        "It lies flat on zero.",
+                        None,
+                    ),
+                    (
+                        "Nothing is absorbed anywhere below the gap.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "SLIDE 2: THE TILT",
+                [
+                    (
+                        "We apply a voltage, so there is now a field inside the material.",
+                        None,
+                    ),
+                    (
+                        "The field tilts both band edges. Both of them, by the same amount, so they stay parallel.",
+                        None,
+                    ),
+                    (
+                        "Pick any single position and measure between the two edges. You get the same band gap as before.",
+                        None,
+                    ),
+                    (
+                        "The field does not close the gap.",
+                        None,
+                    ),
+                    (
+                        "That is what this line says. At every position z, the conduction band edge minus the valence band edge is still the band gap.",
+                        "That is what this line says. At every position zee, the conduction band edge minus the valence band edge is still the band gap.",
+                    ),
+                ],
+            ),
+            (
+                "SLIDE 2: THE STATES",
+                [
+                    (
+                        "This dashed line is the energy the electron would land on. One fixed energy, drawn across the whole material.",
+                        None,
+                    ),
+                    (
+                        "Because the band edge is tilted, this energy crosses it at one position.",
+                        None,
+                    ),
+                    (
+                        "To the left of the crossing the energy is above the band edge, so the electron is allowed there.",
+                        None,
+                    ),
+                    (
+                        "To the right it is below, so the electron is forbidden there.",
+                        None,
+                    ),
+                    (
+                        "And this is the electron state at that energy.",
+                        None,
+                    ),
+                    (
+                        "Without the field it was a plane wave, spread evenly through the crystal.",
+                        None,
+                    ),
+                    (
+                        "The field turned it into an Airy function.",
+                        None,
+                    ),
+                    (
+                        "On the allowed side it oscillates, and on the forbidden side it does not vanish, it decays.",
+                        None,
+                    ),
+                    (
+                        "The hole state does the same thing, mirrored. It oscillates on its own allowed side and decays toward the left.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "SLIDE 2: THE SPECTRUM",
+                [
+                    (
+                        "The purple curve shows the material with the field switched on.",
+                        None,
+                    ),
+                    (
+                        "Absorption now starts below the gap. This is the tunnelling, and it is a consequence of the band tilt we just saw on the left.",
+                        None,
+                    ),
+                    (
+                        "Second, above the gap the absorption no longer rises smoothly. It weaves around the old curve.",
+                        None,
+                    ),
+                    (
+                        "These are the Franz-Keldysh oscillations, and they come from the oscillating parts of the same Airy functions.",
+                        None,
+                    ),
+                    (
+                        "And the photon we send was sitting below the gap, where the material was transparent.",
+                        None,
+                    ),
+                    (
+                        "Now there is absorption at that energy. That is the effect we are after.",
+                        None,
+                    ),
+                ],
+            ),
+        ],
+    },
+    # ---- parts 9-14: the full talk script, slide by slide -----------------
+    # Source: thesis-draft/talk/FULL_SCRIPT.md. Only the spoken lines are
+    # included; the point-at stage directions stay in the md file.
+    {
+        "num": "9",
+        "name": "Talk: opening and direct modulation",
+        "sections": [
+            (
+                "SLIDE 1, OPENING",
+                [
+                    (
+                        "This thesis builds an electro-optical simulation chain for one fabricated electro-absorption modulator chip.",
+                        None,
+                    ),
+                    (
+                        "And it validates that chain against my own measurements of the same chip: optical, electrical, and RF.",
+                        "And it validates that chain against my own measurements of the same chip: optical, electrical, and R F.",
+                    ),
+                ],
+            ),
+            (
+                "STEP 1, THE DFB AT CONSTANT CURRENT",
+                [
+                    (
+                        "A laser needs its drive current above a threshold value before it lases at all.",
+                        None,
+                    ),
+                    (
+                        "Above that threshold, the output power grows with the current.",
+                        None,
+                    ),
+                    (
+                        "Driven at a constant current, the output is constant, continuous wave light.",
+                        None,
+                    ),
+                    (
+                        "Constant power carries no information, and that is the problem this slide solves.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 2, THE DATA",
+                [
+                    (
+                        "The data to be sent is a stream of ones and zeros.",
+                        None,
+                    ),
+                    (
+                        "It is drawn as a two-level electrical signal, still separate from the laser at this point.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 3, DIRECT MODULATION",
+                [
+                    (
+                        "The current now has two parts.",
+                        None,
+                    ),
+                    (
+                        "A constant bias current that stays above threshold at all times, and a small data current added on top of it.",
+                        None,
+                    ),
+                    (
+                        "A one pushes the current above the bias, a zero pulls it below, never down to zero, and never below threshold.",
+                        None,
+                    ),
+                    (
+                        "Because the power current relation is linear above threshold, the current swing becomes a power swing of the same shape.",
+                        None,
+                    ),
+                    (
+                        "The photodiode at the far end converts the received optical power back into a current, and the bit stream is recovered.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 4, CHIRP",
+                [
+                    (
+                        "This same current also disturbs the laser's carrier density.",
+                        None,
+                    ),
+                    (
+                        "Carrier density sets the refractive index inside the cavity, and the index sets the lasing wavelength.",
+                        None,
+                    ),
+                    (
+                        "So every time a bit switches, the wavelength shifts by a small amount.",
+                        None,
+                    ),
+                    (
+                        "Instead of one clean line, the laser emits at two slightly different wavelengths depending on the bit. This is chirp.",
+                        None,
+                    ),
+                    (
+                        "Different wavelengths travel at different speeds in a fiber, so chirp spreads a pulse out over distance and limits how far the signal can go.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 5, RELAXATION OSCILLATION",
+                [
+                    (
+                        "Carrier density and photon density are coupled, so the optical power cannot jump instantly to its new level.",
+                        None,
+                    ),
+                    (
+                        "It overshoots and rings before settling.",
+                        None,
+                    ),
+                    (
+                        "This ringing caps how fast the current can be switched.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "CLOSING",
+                [
+                    (
+                        "All three problems come from the same root cause: one device is asked to both generate the light and carry the data.",
+                        None,
+                    ),
+                    (
+                        "The fix is to split those two jobs.",
+                        None,
+                    ),
+                    (
+                        "Keep the DFB at constant current, and put a second device after it whose only job is to let light through or block it.",
+                        None,
+                    ),
+                    (
+                        "That second device is the electro-absorption modulator.",
+                        None,
+                    ),
+                ],
+            ),
+        ],
+    },
+    {
+        "num": "10",
+        "name": "Talk: the EAM, layer by layer",
+        "sections": [
+            (
+                "STEP 1, THE EML CHIP",
+                [
+                    (
+                        "The DFB laser and the EAM share one identical epitaxial stack.",
+                        None,
+                    ),
+                    (
+                        "They are grown together on the same chip, and only differ in doping and how they are driven.",
+                        None,
+                    ),
+                    (
+                        "The laser runs on forward bias, the modulator on reverse bias.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 2, THE SUBSTRATE",
+                [
+                    (
+                        "The n-type indium phosphide substrate is the base the whole chip is grown on, with a common backside contact that grounds the entire chip.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 3, N-SIDE CONFINEMENT",
+                [
+                    (
+                        "The n-side confinement layers form one side of the waveguide core.",
+                        None,
+                    ),
+                    (
+                        "Their refractive index is higher than the indium phosphide around them, which is what confines the light.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 4, THE INTRINSIC REGION",
+                [
+                    (
+                        "This is the undoped layer, the i of the p-i-n diode.",
+                        "This is the undoped layer, the I of the P I N diode.",
+                    ),
+                    (
+                        "Everything the modulator does happens inside this one thin layer.",
+                        None,
+                    ),
+                    (
+                        "Its internal structure, the quantum wells, comes two slides later.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 5, P-SIDE CONFINEMENT",
+                [
+                    (
+                        "The mirror image of the n side, now p-doped, completing the waveguide core.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 6, THE CLADDING",
+                [
+                    (
+                        "The p-type indium phosphide cladding closes the waveguide optically and carries the current to the contact.",
+                        None,
+                    ),
+                    (
+                        "Doping is graded: low near the light, to keep loss down, higher near the top, for low series resistance.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 7, THE CONTACT",
+                [
+                    (
+                        "The top electrode. Together with the backside contact, these are the two terminals the reverse bias is applied across.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 8, THE RIDGE",
+                [
+                    (
+                        "A narrow ridge is etched down through the structure, confining one single optical mode centered on the intrinsic region.",
+                        None,
+                    ),
+                    (
+                        "This is the physical device the rest of the talk analyzes.",
+                        None,
+                    ),
+                ],
+            ),
+        ],
+    },
+    {
+        "num": "11",
+        "name": "Talk: the Franz-Keldysh effect",
+        "sections": [
+            (
+                "STEP 1, NO FIELD",
+                [
+                    (
+                        "Bulk semiconductor, no voltage on it.",
+                        None,
+                    ),
+                    (
+                        "Both band edges are flat, and the distance between them is the band gap.",
+                        None,
+                    ),
+                    (
+                        "To absorb a photon below that gap, I need an electron and a hole on the two dashed levels.",
+                        None,
+                    ),
+                    (
+                        "Inside the gap those two states are flat. Zero amplitude, at every position in the crystal.",
+                        None,
+                    ),
+                    (
+                        "So nothing can be absorbed, and the material is transparent.",
+                        None,
+                    ),
+                    (
+                        "On the right is the absorption spectrum of the same material.",
+                        None,
+                    ),
+                    (
+                        "The horizontal axis is the photon energy, measured from the band gap. Zero is exactly at the gap.",
+                        None,
+                    ),
+                    (
+                        "The grey dashed curve is the case with no field. The whole left half lies flat on zero. Nothing is absorbed below the gap.",
+                        None,
+                    ),
+                    (
+                        "The orange line only marks the photon we chose. Follow it up, and the grey curve is at zero.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 2, THE FIELD TILTS THE BANDS",
+                [
+                    (
+                        "Now a uniform electric field.",
+                        None,
+                    ),
+                    (
+                        "The potential energy of an electron changes linearly across the crystal, so both band edges tilt, by the same amount.",
+                        None,
+                    ),
+                    (
+                        "At any one position the distance between them is still exactly the band gap.",
+                        None,
+                    ),
+                    (
+                        "The field has not closed the gap. It has only changed the geometry.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 3, THE BARRIER BECOMES FINITE",
+                [
+                    (
+                        "Follow the upper dashed level to the right. The conduction band edge rises to meet it.",
+                        None,
+                    ),
+                    (
+                        "Left of that crossing the electron is allowed, right of it, it is not.",
+                        None,
+                    ),
+                    (
+                        "The hole has its own crossing, and it is allowed only on the other side.",
+                        None,
+                    ),
+                    (
+                        "In between, neither carrier has a state. That is a barrier.",
+                        None,
+                    ),
+                    (
+                        "Without the field it was the whole crystal. Now it is finite.",
+                        None,
+                    ),
+                    (
+                        "Its width is the missing energy divided by the slope of the bands. The stronger the field, the thinner the barrier.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 4, THE STATES REACH EACH OTHER",
+                [
+                    (
+                        "A quantum state does not stop dead at a barrier. It decays into it.",
+                        None,
+                    ),
+                    (
+                        "The electron leaks in from one side, the hole from the other, and inside the barrier they reach each other.",
+                        None,
+                    ),
+                    (
+                        "That overlap is small, but it is not zero. And that is all an absorbed photon needs.",
+                        None,
+                    ),
+                    (
+                        "The photon supplies most of the energy, and the carriers tunnel the rest of the way. This is photon assisted tunnelling.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 5, THE SPECTRUM",
+                [
+                    (
+                        "Below the gap there is now an absorption tail where there used to be nothing.",
+                        None,
+                    ),
+                    (
+                        "Above the gap the absorption no longer rises smoothly. It oscillates, because these are wavefunctions and they interfere.",
+                        None,
+                    ),
+                    (
+                        "If I raise the field, the bands tilt more steeply, and the tail reaches further down.",
+                        None,
+                    ),
+                    (
+                        "So at one fixed wavelength I can change the absorption with a voltage. That is electroabsorption in bulk.",
+                        None,
+                    ),
+                ],
+            ),
+        ],
+    },
+    {
+        "num": "12",
+        "name": "Talk: EAM physics, wells to data",
+        "sections": [
+            (
+                "STEP 1, MULTI QUANTUM WELL",
+                [
+                    (
+                        "The intrinsic region is not one uniform layer.",
+                        None,
+                    ),
+                    (
+                        "It alternates between thin wells of a smaller band gap material and barriers of a larger band gap material, repeated several times.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 2, DISCRETE LEVELS",
+                [
+                    (
+                        "A carrier confined to a layer this thin cannot take just any energy.",
+                        None,
+                    ),
+                    (
+                        "Quantum confinement restricts it to discrete levels, one for the electron, one for the heavy hole.",
+                        None,
+                    ),
+                    (
+                        "At zero field both wavefunctions sit centred in the well, overlapping almost completely.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 3, E1 AND HH1",
+                [
+                    (
+                        "Zoom into a single well.",
+                        None,
+                    ),
+                    (
+                        "e1 is the lowest energy the confined electron can occupy.",
+                        "e one is the lowest energy the confined electron can occupy.",
+                    ),
+                    (
+                        "hh1 is the lowest energy state of the confined heavy hole.",
+                        "h h one is the lowest energy state of the confined heavy hole.",
+                    ),
+                    (
+                        "The transition between these two levels sets the absorption edge.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 4, THE EXCITON",
+                [
+                    (
+                        "An absorbed photon lifts an electron from hh1 to e1.",
+                        "An absorbed photon lifts an electron from h h one to e one.",
+                    ),
+                    (
+                        "The empty state left behind is a hole, Coulomb bound to the electron that just left it. This bound pair is the exciton.",
+                        None,
+                    ),
+                    (
+                        "The binding lowers the transition energy slightly, so the exciton line sits just below the plain level to level energy.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 5, READING THE SPECTRUM",
+                [
+                    (
+                        "Each bias voltage produces one absorption curve.",
+                        None,
+                    ),
+                    (
+                        "The device is only ever read out at one fixed wavelength, the operating wavelength, thirteen ten nanometers.",
+                        None,
+                    ),
+                    (
+                        "At zero volts the absorption edge sits to the left of that line, absorption there is close to zero, and the light passes through. This is the ON state.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 6, THE RED SHIFT",
+                [
+                    (
+                        "Apply reverse bias. The field tilts the potential inside each well.",
+                        None,
+                    ),
+                    (
+                        "e1 moves down, hh1 moves up, so the energy between them shrinks.",
+                        "e one moves down, h h one moves up, so the energy between them shrinks.",
+                    ),
+                    (
+                        "The whole absorption edge shifts to longer wavelength. A red shift.",
+                        None,
+                    ),
+                    (
+                        "The edge now sits on the operating line, absorption there is large, and the light is absorbed. This is the OFF state.",
+                        None,
+                    ),
+                    (
+                        "This combined shift and weakening of the exciton transition under field is the quantum confined Stark effect, the mechanism the whole device is built on.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 7, WHAT THE LIGHT SEES",
+                [
+                    (
+                        "The light travels through the device as one guided optical mode.",
+                        None,
+                    ),
+                    (
+                        "Only a fraction of that mode's energy overlaps the wells. That fraction is the confinement factor, Gamma.",
+                        None,
+                    ),
+                    (
+                        "Over the device length, the transmission follows an exponential law: e to the minus Gamma alpha L.",
+                        None,
+                    ),
+                    (
+                        "The ratio of the ON and OFF transmissions is the extinction ratio, the modulator's main figure of merit.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 8, THE DRIVE",
+                [
+                    (
+                        "In operation the device is not switched between two fixed voltages.",
+                        None,
+                    ),
+                    (
+                        "A DC bias sets the resting point in the middle of the useful range, and an RF signal swings the voltage around it.",
+                        "A D C bias sets the resting point in the middle of the useful range, and an R F signal swings the voltage around it.",
+                    ),
+                    (
+                        "One level for a one, a more negative level for a zero. The RF signal is the data.",
+                        "One level for a one, a more negative level for a zero. The R F signal is the data.",
+                    ),
+                ],
+            ),
+            (
+                "STEP 9, THE LIGHT COPIES THE BITS",
+                [
+                    (
+                        "Every instantaneous voltage places the absorption edge somewhere relative to the operating wavelength.",
+                        None,
+                    ),
+                    (
+                        "Less negative, the edge sits away from the line, and light passes. More negative, the edge sits on the line, and light is absorbed.",
+                        None,
+                    ),
+                    (
+                        "The laser feeds in constant light. The output copies the voltage waveform, one to one.",
+                        None,
+                    ),
+                    (
+                        "This is how the bit stream ends up written onto the light.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 10, WHAT LIMITS THE SPEED",
+                [
+                    (
+                        "Two things cap how fast this can be driven.",
+                        None,
+                    ),
+                    (
+                        "First, the diode is a capacitor. Every voltage change has to charge it through the circuit resistance, and that takes time.",
+                        None,
+                    ),
+                    (
+                        "Second, absorption leaves real electron hole pairs in the wells.",
+                        None,
+                    ),
+                    (
+                        "Holes escape slowly, and if they pile up, their charge screens the applied field and weakens the modulation. This is saturation.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 11, WHY THE EXCITON MECHANISM",
+                [
+                    (
+                        "The absorption edge only has to move a few tens of nanometres, driven by about a volt.",
+                        None,
+                    ),
+                    (
+                        "And that shift itself is essentially instantaneous. It is an electronic effect.",
+                        None,
+                    ),
+                    (
+                        "The real bottleneck is the circuit and the carrier escape time, not the physics of the shift.",
+                        None,
+                    ),
+                ],
+            ),
+        ],
+    },
+    {
+        "num": "13",
+        "name": "Talk: the electrical model",
+        "sections": [
+            (
+                "STEP 1, THE EQUIVALENT CIRCUIT",
+                [
+                    (
+                        "Under reverse bias almost no current flows through the device, so electrically the EAM behaves as a load.",
+                        None,
+                    ),
+                    (
+                        "The ridge is a series resistance, the depleted quantum well region is a capacitor, and the photocurrent appears as a parallel resistance.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 2, THE CAPACITOR",
+                [
+                    (
+                        "The undoped region has no free carriers under bias. It behaves as an insulator between two conductive doped layers.",
+                        None,
+                    ),
+                    (
+                        "That is exactly the geometry of a parallel plate capacitor, and its capacitance grows with the device length.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 3, THE PHOTOCURRENT",
+                [
+                    (
+                        "Every absorbed photon leaves behind a swept out electron hole pair, and that current depends on the bias point.",
+                        None,
+                    ),
+                    (
+                        "In the circuit this shows up as the parallel resistance.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 4, THE SERIES RESISTANCE",
+                [
+                    (
+                        "Between the probe and the capacitor, the current has to cross the p-type ridge and its contact. This is the series resistance.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 5, THE RC LOW-PASS",
+                [
+                    (
+                        "The drive signal has to charge the capacitance through the source impedance and the ridge resistance in series.",
+                        None,
+                    ),
+                    (
+                        "That RC combination sets a first estimate of the modulator's electrical bandwidth.",
+                        "That R C combination sets a first estimate of the modulator's electrical bandwidth.",
+                    ),
+                ],
+            ),
+            (
+                "STEP 6, THE LENGTH",
+                [
+                    (
+                        "Both the series resistance and the capacitance are set by the same design variable, the device length.",
+                        None,
+                    ),
+                    (
+                        "Resistance falls with length, capacitance grows with it.",
+                        None,
+                    ),
+                    (
+                        "This is one half of the length trade off. The optical model gives the other half.",
+                        None,
+                    ),
+                ],
+            ),
+        ],
+    },
+    {
+        "num": "14",
+        "name": "Talk: the optical model",
+        "sections": [
+            (
+                "STEP 1, THE EXPONENTIAL LAW",
+                [
+                    (
+                        "Light crosses the modulator as a guided mode, and every slice along the length absorbs the same fraction of what enters it.",
+                        None,
+                    ),
+                    (
+                        "That per slice statement integrates into the exponential transmission law.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 2, ONE LAW, TWO STATES",
+                [
+                    (
+                        "The applied voltage never touches the light directly. It only moves the absorption coefficient, through the Stark effect.",
+                        None,
+                    ),
+                    (
+                        "At low bias the absorption edge sits away from the operating wavelength. At high bias it sits on it.",
+                        None,
+                    ),
+                    (
+                        "Same transmission law, two different absorption values.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 3, THE EXTINCTION RATIO",
+                [
+                    (
+                        "The figure of merit is the ratio of the two output powers, ON over OFF.",
+                        None,
+                    ),
+                    (
+                        "The device length multiplies directly into it. A longer device gives a larger extinction ratio.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 4, THE INSERTION LOSS",
+                [
+                    (
+                        "Even in the ON state the device absorbs some light. It is never perfectly transparent.",
+                        None,
+                    ),
+                    (
+                        "This loss also grows with length.",
+                        None,
+                    ),
+                ],
+            ),
+            (
+                "STEP 5, THE TRADE-OFF",
+                [
+                    (
+                        "Extinction ratio and insertion loss both grow with device length. Electrical bandwidth falls with it.",
+                        None,
+                    ),
+                    (
+                        "One design variable, three competing figures of merit.",
+                        None,
+                    ),
+                    (
+                        "Getting that trade off right is what the simulation chain is for.",
                         None,
                     ),
                 ],
