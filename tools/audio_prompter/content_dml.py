@@ -1345,25 +1345,12 @@ PARTS = [
                 ],
             ),
             (
-                "STEP 2, DISCRETE LEVELS",
+                "STEP 2, E1 AND HH1",
                 [
                     (
                         "A carrier confined to a layer this thin cannot take just any energy.",
                         None,
                     ),
-                    (
-                        "Quantum confinement restricts it to discrete levels, one for the electron, one for the heavy hole.",
-                        None,
-                    ),
-                    (
-                        "At zero field both wavefunctions sit centred in the well, overlapping almost completely.",
-                        None,
-                    ),
-                ],
-            ),
-            (
-                "STEP 3, E1 AND HH1",
-                [
                     (
                         "Zoom into a single well.",
                         None,
@@ -1383,7 +1370,7 @@ PARTS = [
                 ],
             ),
             (
-                "STEP 4, THE EXCITON",
+                "STEP 3, THE EXCITON",
                 [
                     (
                         "An absorbed photon lifts an electron from hh1 to e1.",
@@ -1400,7 +1387,7 @@ PARTS = [
                 ],
             ),
             (
-                "STEP 5, READING THE SPECTRUM",
+                "STEP 4, READING THE SPECTRUM",
                 [
                     (
                         "Each bias voltage produces one absorption curve.",
@@ -1417,7 +1404,7 @@ PARTS = [
                 ],
             ),
             (
-                "STEP 6, THE RED SHIFT",
+                "STEP 5, THE RED SHIFT",
                 [
                     (
                         "Apply reverse bias. The field tilts the potential inside each well.",
@@ -1442,7 +1429,7 @@ PARTS = [
                 ],
             ),
             (
-                "STEP 7, WHAT THE LIGHT SEES",
+                "STEP 6, WHAT THE LIGHT SEES",
                 [
                     (
                         "The light travels through the device as one guided optical mode.",
@@ -1463,7 +1450,7 @@ PARTS = [
                 ],
             ),
             (
-                "STEP 8, THE DRIVE",
+                "STEP 7, THE DRIVE",
                 [
                     (
                         "In operation the device is not switched between two fixed voltages.",
@@ -1480,7 +1467,7 @@ PARTS = [
                 ],
             ),
             (
-                "STEP 9, THE LIGHT COPIES THE BITS",
+                "STEP 8, THE LIGHT COPIES THE BITS",
                 [
                     (
                         "Every instantaneous voltage places the absorption edge somewhere relative to the operating wavelength.",
@@ -1501,7 +1488,7 @@ PARTS = [
                 ],
             ),
             (
-                "STEP 10, WHAT LIMITS THE SPEED",
+                "STEP 9, WHAT LIMITS THE SPEED",
                 [
                     (
                         "Two things cap how fast this can be driven.",
@@ -1522,7 +1509,7 @@ PARTS = [
                 ],
             ),
             (
-                "STEP 11, WHY THE EXCITON MECHANISM",
+                "STEP 10, WHY THE EXCITON MECHANISM",
                 [
                     (
                         "The absorption edge only has to move a few tens of nanometres, driven by about a volt.",
