@@ -1,5 +1,5 @@
 // bump CACHE when index.html changes; the old copy is then dropped
-const CACHE = 'exam-prompter-20260917-124500';
+const CACHE = 'exam-prompter-20260917-125824';
 const ASSETS = ['./', './index.html', './manifest.webmanifest'];
 self.addEventListener('install', e => {
   self.skipWaiting();
