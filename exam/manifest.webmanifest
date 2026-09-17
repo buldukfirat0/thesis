@@ -1,0 +1,9 @@
+{
+  "name": "EXAM Quantum Optics sesli calisma",
+  "short_name": "EXAM QO",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#14181f",
+  "theme_color": "#14181f",
+  "icons": []
+}
