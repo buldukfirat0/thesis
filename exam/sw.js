@@ -1,5 +1,5 @@
 // bump CACHE when index.html changes; the old copy is then dropped
-const CACHE = 'exam-prompter-20260917-190025';
+const CACHE = 'exam-prompter-20260918-100327';
 // clips have content-hash names and never change, so they live in their own cache
 // that survives page updates
 const AUDIO = 'exam-prompter-audio';
